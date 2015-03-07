@@ -11,24 +11,27 @@
 fibonacci:
 	@ ADD/MODIFY CODE BELOW
 	@ PROLOG
-	push {r3, r4, r5, lr}
+	push {lr}
+	
+	@R4=previousA  R5=previousB  R6=sum  R7=i  R8=x
 
-	@ R4 = R0 - 0 (update flags)
-	@ if(R0 <= 0) goto .L3 (which returns 0)
+	ADDS R8,R0,#0	@update flags
+	BLE .L3 	@ if input <= 0, goto .L3 (which returns 0)
+	
+	MOV R4,#0	@previousA = -1
+	MOV R5,#1	@previousB = 1
+	MOV R7,#1	@i = 1
 
-	@ Compare R4 wtih 1
-	@ If R4 == 1 goto .L4 (which returns 1)
+.Loop:
+	ADD R6,R4,R5	@sum = previousA + previousB
+	MOV R4,R5	@previousA = previousB
+	MOV R5,R6	@previousB = sum
+	ADD R7,#1	@i++
+	CMP R8,R7
+	BGT .Loop	@if i<= x, go to .loop
 
-	@ R0 = R4 - 1
-	@ Recursive call to fibonacci with R4 - 1 as parameter
-
-	@ R5 = R0
-	@ R0 = R4 - 2
-	@ Recursive call to fibonacci with R4 - 2 as parameter
-
-	@ R0 = R5 + R0 (update flags)
-
-	pop {r3, r4, r5, pc}		@EPILOG
+	MOV R0,R6
+	pop {pc}
 
 	@ END CODE MODIFICATION
 .L3:
