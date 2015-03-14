@@ -14,7 +14,7 @@ int main(int argc, char **argv)
   result = fibonacci(number);   
   finish = clock();
 
-  FILE* fp = fopen("record.txt","a");
+  FILE* fp = fopen("record.txt","w");
   fprintf(fp,"%d\t%lu\n",number,finish-start);
   fclose(fp);
   printf("done\n");

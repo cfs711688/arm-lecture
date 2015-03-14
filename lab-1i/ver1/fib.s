@@ -13,20 +13,22 @@ fibonacci:
 	@ PROLOG
 	push {lr}
 	
-	@R4=previousA  R5=previousB  R6=sum 
+	@R4=previousA  R5=previousB  R6=sum  R7=i  R8=x
 
-	SUBS R8,R0,#1	@update flags
-	BLE .L3 	@ if input == 1, goto .L3 (which returns 1)
+	ADDS R8,R0,#0	@update flags
+	BLE .L3 	@ if input <= 0, goto .L3 (which returns 0)
 	
-	MOV R4,#0	@previousA = 0
+	MOV R4,#0	@previousA = -1
 	MOV R5,#1	@previousB = 1
+	MOV R7,#1	@i = 1
 
 .Loop:
 	ADD R6,R4,R5	@sum = previousA + previousB
 	MOV R4,R5	@previousA = previousB
 	MOV R5,R6	@previousB = sum
-	SUBS R0,#1	@r0 - 1
-	BGT .Loop	@if R0-1 (remain count) > 0, go to .loop
+	ADD R7,#1	@i++
+	CMP R8,R7
+	BGT .Loop	@if i<= x, go to .loop
 
 	MOV R0,R6
 	pop {pc}
@@ -35,9 +37,12 @@ fibonacci:
 
 	@ END CODE MODIFICATION
 .L3:
-	mov r0, #1			@ R0 = 0
+	mov r0, #0			@ R0 = 0
 	pop {pc}	@ EPILOG
 
+.L4:
+	mov r0, #1			@ R0 = 1
+	pop {pc}	@ EPILOG
 
 	.size fibonacci, .-fibonacci
 	.end

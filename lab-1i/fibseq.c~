@@ -10,15 +10,16 @@ int main(int argc, char **argv)
   clock_t start, finish;
 
   scanf("%d",&number);
-  start = clock();
+  start =clock();
   result = fibonacci(number);   
-  finish = clock();
+  finish =clock();
+  unsigned dt = finish-start;
 
   FILE* fp = fopen("record.txt","a");
-  fprintf(fp,"%d\t%lu\n",number,finish-start);
+  fprintf(fp,"%d\t%u\n",number,dt);
   fclose(fp);
-  printf("done\n");
-  //printf("The fibonacci sequence at %d is: %d\n", number, result);
-  //printf("QAQ %lu\n",finish - start);
+  //printf("done\n");
+  printf("The fibonacci sequence at %d is: %d\n", number, result);
+  printf("QAQ %u\n",CLOCK_PER_SEC);
 }
 
